@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:title" content="Cyber Empire | News"/>
+  <meta property="og:description" content="F-Secure found 2 critical vulnerabilities in the open-source SaltStack Salt configuration framework." />
+  <meta property="og:secure_url" content="https://thecyberempire.com/news/articles/vulnerabilities/saltstack/index.html"/>
+  <meta property="og:image" content="https://thecyberempire.com/news/afb/saltstackbackground.png"/>
+  <meta property="og:image:width" content="477" />
+  <meta property="og:image:height" content="477"/>
+  <meta property="og:image:alt" content="Made by Cyber Empire"/>
+  <meta name="theme-color" content="#00FF00">
+
+  <title>Cyber Empire | News</title>
+  
+  <!-- Titillium Font Family-->
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dosis&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap core CSS -->
+  <link href="../../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="../../../../../css/styles.css" rel="stylesheet" />
+  <!-- Core theme CSS (includes Bootstrap) -->
+  <link href="../../../css/blog-home.css" rel="stylesheet" />
+
+</head>
+
+<body>
+
+ <!-- Navigation-->
+ <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="position: absolute;">
+  <div class="container">
+    <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="../../../../../afb/cyberempire.png" style="width: 150px; height: auto;" /></a><button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu<i class="fas fa-bars ml-1"></i></button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav text-uppercase ml-auto">
+        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="../../../../../index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="../../../index.html">Go Back</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+  <!-- Page Content -->
+  <div class="container">
+
+    <div class="row">
+
+      <!-- Post Content Column -->
+      <div class="col-lg-8" style="background-color: white;">
+
+        <!-- Title -->
+        <h1 class="mt-4">Critical SaltStack RCE Vulnerability</h1>
+        <p class="lead">F-Secure found 2 critical vulnerabilities in the open-source SaltStack Salt configuration framework. Attackers will  take advantage of this.</p>
+
+        <hr />
+        
+        <!-- Date/Time -->
+        <p class="titillium">Posted by <a href="#"><strong>7Provi</strong></a> May 3, 2020 at 16:32 PM</p>
+        
+        <hr />
+
+        <!-- Preview Image -->
+        <img class="img-fluid rounded" src="../../../afb/saltstackbackground.png" alt="SaltStack RCE">
+        <hr />
+
+        <!-- Post Content -->
+        <blockquote class="blockquote">
+          <p class="mb-0"><strong>What is Salt?</strong></p>
+        </blockquote>
+        <p class="titillium">Salt is (Python-based) open-source software created by SaltStack. Salt is capable of maintaining remote nodes, <i>a terminal or computer located apart from the main network, </i>in defined states.
+        For example, it can ensure that specific packages are installed and that specific services are running. Salt can query and execute commands either on individual nodes or by using arbitrary selection criteria.</p>
+
+        
+        <!-- Post Content -->
+        <blockquote class="blockquote">
+          <p class="mb-0"><strong>About SaltStack</strong></p>
+        </blockquote>
+        <p class="titillium">SaltStack develops award-winning software used by IT and security operations teams to help modern business more efficiently secure and maintain all aspects of their digital infrastructure. 
+          They help enterprise IT organizations orchestrate and automate difficult IT tasks with speed and flexibility to ultimately deliver continuous security compliance, vulnerability remediation, and real IT security.</p>
+          
+        <!-- Post Content -->
+        <blockquote class="blockquote">
+          <p class="mb-0"><strong>Vulnerabilities</strong></p>
+        </blockquote>
+        <p class="titillium">F-Secure researchers found 2 vulnerabilities in the framework. The 2 vulnerabilities are very different from each other:</p>
+        <p class="titillium"><strong>1. CVE-2020-11651</strong> - Authentication bypass issue<br />
+          Functionalities are unintentionally exposed to unauthenticated network clients.</p>
+          <p class="titillium"><strong>Detailed:</strong><br />
+          An issue exists in SaltStack Salt prior to 2019.2.4 and 3000 prior to 3000.2. The salt-master process ClearFuncs class does not properly validate method calls. This allows a remote user to access some methods without authentication. These methods can be used to retrieve user tokens from the salt master and/or run arbitrary commands on salt minions.</p>
+        <p class="titillium"><strong>2. CVE-2020-11652</strong> - Directory-traversal flaw<br />
+          Untrusted input (in network requests) is not sanitized correctly. This allows access to the entire filesystem of the master server.</p>
+          <p class="titillium"><strong>Detailed:</strong><br />
+          An issue exists in SaltStack Salt prior to 2019.2.4 and 3000 prior to 3000.2. The salt-master process ClearFuncs class allows access to some methods that improperly sanitize paths. These methods allow arbitrary directory access to authenticated users.</p>
+
+          <blockquote class="blockquote">
+            <p class="mb-0"><strong>ZeroMQ protocol</strong></p>
+          </blockquote>
+          <p class="titillium">Each server runs an agent (minion), which connects to a master. A master is a Salt installation that collects state reports from minions and publishes update messages that minions can act on.
+            In order to communicate, the master uses two ZeroMQ channels. One is the “request server” where minions connect to report their status. And the other one is the “publish server” where the master publishes messages that the minions can connect and subscribe to.</p>
+            <p class="titillium">The authentication bypass can be achieved because the ClearFuncs class processes unauthenticated requests and unintentionally exposes the <span style="color: #00FF00;"><strong>_send_pub()</strong></span>. This is the method used to queue messages from the master publish server to the minions.</p>
+            <p class="titillium">As for the directory traversal, the so called “wheel” module contains commands used to read and write files under specific directory paths.</p>
+            <p class="titillium">The inputs to these functions are linked with the target directory and the resulting path is not canonicalized. The <span style="color: #00FF00;"><strong>get_token()</strong></span> method of the <span style="color: #00FF00;"><strong>salt.tokens.localfs class</strong></span> fails to sanitize the token input parameter which is used as a filename, allowing the reading of files outside of the intended directory.</p>
+                                    
+            <blockquote class="blockquote">
+              <p class="mb-0"><strong>Expectations</strong></p>
+            </blockquote>
+            <p class="titillium">F-Secure researchers expect many attacks to occur in the coming days.</p>
+
+            <blockquote class="blockquote">
+              <p class="mb-0"><strong>What is RCE?</strong></p>
+            </blockquote>
+            
+            <p class="titillium">Remote code execution (RCE) is the ability an attacker has to access someone else's computing device and make changes, no matter where the device is geographically located.</p>
+            <p class="titillium">Vulnerabilities can provide an attacker with the ability to execute malicious code and take complete control of an affected system with the privileges of the user running the application. After gaining access to the system, attackers will often attempt to elevate their privileges.</p>
+
+            <hr>
+
+        <!-- Comments Form -->
+        <div class="card my-4">
+          <h5 class="card-header">Leave a Comment:</h5>
+          <div class="card-body">
+            <form>
+              <div class="form-group">
+                <textarea class="form-control" rows="3"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Widgets Column -->
+      <div class="col-md-4" style="margin-top: -2.2%;">
+        <!-- Side Widget -->
+          <div class="card my-4-2" style="width: 22.2rem; background-color: #343a40;">
+            <h5 class="card-header2" style="color: #00FF00;">Breaking News</h5>
+            <img class="card-img-top" src="../../../afb/saltstackbackground.png" alt="SaltStack RCE"/>
+            <div class="card-body">
+              <p class="card-text" style="color: #00FF00;">SaltStack has an RCE vulnerability with a CVSS score of 10.</p>
+              <a href="index.html"  class="btn btn-primary">Read More</a>
+            </div>
+          </div>
+
+        <!-- Side Widget -->
+        <div class="card my-4-2">
+          <h5 class="card-header2">Cyber Empire Shop</h5>
+          <div class="card-body" style="color: #00FF00;">
+            <div class="slideshow-container">
+
+              <div class="mySlides fade">
+                <a href="../../../../../index.html#shop">
+                  <img src="../../../../../afb/shop/T-ShirtOriginal.png" style="width:100%">
+                </a>
+              </div>
+              
+              <div class="mySlides fade">
+                <a href="../../../../../index.html#shop">
+                  <img src="../../../../../afb/shop/HoodieOriginal.png" style="width: 150px; height: auto; margin-left: 25%;">
+                </a>
+              </div>
+              
+              <div class="mySlides fade">
+                <a href="../../../../../index.html#shop">
+                <img src="../../../../../afb/shop/PoloOriginal.png" style="width:95%">
+                </a>
+            </div>
+              
+              </div>
+              <br />
+              
+              <div style="text-align:center">
+                <span class="dot"></span> 
+                <span class="dot"></span> 
+                <span class="dot"></span> 
+              </div>
+          </div>
+        </div>
+
+      </div>
+          
+          <script>
+          var slideIndex = 0;
+          showSlides();
+          
+          function showSlides() {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            var dots = document.getElementsByClassName("dot");
+            for (i = 0; i < slides.length; i++) {
+              slides[i].style.display = "none";  
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}    
+            for (i = 0; i < dots.length; i++) {
+              dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex-1].style.display = "block";  
+            dots[slideIndex-1].className += " active";
+            setTimeout(showSlides, 4000); // Change image every 4 seconds
+          }
+          </script>
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white" style="color: #00FF00;">©2020 thecyberempire.com | All rights reserved</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
