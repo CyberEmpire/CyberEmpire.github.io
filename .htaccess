@@ -1,0 +1,31 @@
+# X-XSS-Protection
+<IfModule mod_headers.c>
+	Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# X-Frame-Options
+<IfModule mod_headers.c>
+	Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# X-Content-Type-Options
+<IfModule mod_headers.c>
+	Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# Strict-Transport-Security
+<IfModule mod_headers.c>
+	Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+</IfModule>
+
+# Referrer-Policy
+<IfModule mod_headers.c>
+	Header set Referrer-Policy "same-origin"
+</IfModule>
+
+# Rewrites
+RewriteEngine On
+RewriteRule ^home(.*)$ http://thecyberempire.com
+RewriteRule ^news(.*)$ http://thecyberempire.com/services/news/index.html
+RewriteRule ^learnhacking(.*)$ http://thecyberempire.com/services/news/articles/hacking/learnhacking/index.html
+RewriteRule ^saltstack(.*)$ http://thecyberempire.com/services/news/articles/vulnerabilities/saltstack/index.html
